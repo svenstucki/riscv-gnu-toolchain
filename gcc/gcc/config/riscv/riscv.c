@@ -361,6 +361,19 @@ static const struct riscv_tune_info rocket_tune_info = {
   5						/* memory_cost */
 };
 
+/* Costs to use when optimizing for pulp3 (unsupported features have same cost as rocket TODO: investigate impact).  */
+static const struct riscv_tune_info pulp3_tune_info = {
+  {COSTS_N_INSNS (4), COSTS_N_INSNS (5)},	/* fp_add */
+  {COSTS_N_INSNS (4), COSTS_N_INSNS (5)},	/* fp_mul */
+  {COSTS_N_INSNS (20), COSTS_N_INSNS (20)},	/* fp_div */
+  {COSTS_N_INSNS (1), COSTS_N_INSNS (1)},	/* int_mul */
+  {COSTS_N_INSNS (6), COSTS_N_INSNS (6)},	/* int_div */
+  1,						/* issue_rate */
+  3,						/* branch_cost */
+  COSTS_N_INSNS (2),				/* fp_to_int_cost */
+  2						/* memory_cost (assuming TCDM) */
+};
+
 /* Costs to use when optimizing for size.  */
 static const struct riscv_tune_info optimize_size_tune_info = {
   {COSTS_N_INSNS (1), COSTS_N_INSNS (1)},	/* fp_add */
@@ -378,6 +391,7 @@ static const struct riscv_tune_info optimize_size_tune_info = {
 static const struct riscv_cpu_info riscv_cpu_info_table[] = {
   /* Entries for generic ISAs.  */
   { "rocket", "IMAFD", &rocket_tune_info },
+  { "pulp3", "I", &pulp3_tune_info },
 };
 
 /* Return the riscv_cpu_info entry for the given name string.  */
