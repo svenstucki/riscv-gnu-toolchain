@@ -142,6 +142,7 @@ along with GCC; see the file COPYING3.  If not see
    --with-tune is ignored if -mtune is specified.
    --with-float is ignored if -mhard-float or -msoft-float are specified. */
 #define OPTION_DEFAULT_SPECS \
+  {"arch", "%{!march=*:-march=%(VALUE)}"},			   \
   {"arch_32", "%{" OPT_ARCH32 ":%{m32}}" }, \
   {"arch_64", "%{" OPT_ARCH64 ":%{m64}}" }, \
   {"tune", "%{!mtune=*:-mtune=%(VALUE)}" }, \
@@ -725,6 +726,10 @@ enum reg_class
 #define GP_TEMP_FIRST (GP_REG_FIRST + 5)
 #define FP_ARG_FIRST (FP_REG_FIRST + 10)
 #define FP_ARG_LAST  (FP_ARG_FIRST + MAX_ARGS_IN_REGISTERS - 1)
+
+#define CALLEE_SAVED_REG_NUMBER(REGNO)			\
+  ((REGNO) >= 8 && (REGNO) <= 9 ? (REGNO) - 8 :		\
+   (REGNO) >= 18 && (REGNO) <= 27 ? (REGNO) - 16 : -1)
 
 #define LIBCALL_VALUE(MODE) \
   riscv_function_value (NULL_TREE, NULL_TREE, MODE)

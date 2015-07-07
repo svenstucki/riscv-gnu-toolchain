@@ -56,9 +56,15 @@ struct riscv_cl_insn
   fixS *fixp;
 };
 
-bfd_boolean rv64 = TRUE; /* RV64 (true) or RV32 (false) */
-#define LOAD_ADDRESS_INSN (rv64 ? "ld" : "lw")
-#define ADD32_INSN (rv64 ? "addiw" : "addi")
+/* The default architecture.  */
+#ifndef DEFAULT_ARCH
+#define DEFAULT_ARCH "riscv64"
+#endif
+static const char default_arch[] = DEFAULT_ARCH;
+
+unsigned xlen = 0; /* width of an x-register */
+#define LOAD_ADDRESS_INSN (xlen == 64 ? "ld" : "lw")
+#define ADD32_INSN (xlen == 64 ? "addiw" : "addi")
 
 unsigned elf_flags = 0;
 
@@ -95,7 +101,7 @@ riscv_subset_supports(const char* feature)
 
   if ((rv64_insn = !strncmp(feature, "64", 2)) || !strncmp(feature, "32", 2))
     {
-      if (rv64 != rv64_insn)
+      if ((xlen == 64) != rv64_insn)
         return 0;
       feature += 2;
     }
@@ -151,12 +157,12 @@ riscv_set_arch (const char* arg)
 
   if (strncmp(arg, "RV32", 4) == 0)
     {
-      rv64 = FALSE;
+      xlen = 32;
       arg += 4;
     }
   else if (strncmp(arg, "RV64", 4) == 0)
     {
-      rv64 = TRUE;
+      xlen = 64;
       arg += 4;
     }
   else if (strncmp(arg, "RV", 2) == 0)
@@ -298,7 +304,7 @@ static char *expr_end;
 const char *
 riscv_target_format (void)
 {
-  return rv64 ? "elf64-littleriscv" : "elf32-littleriscv";
+  return xlen == 64 ? "elf64-littleriscv" : "elf32-littleriscv";
 }
 
 /* Return the length of instruction INSN.  */
@@ -753,7 +759,7 @@ append_insn (struct riscv_cl_insn *ip, expressionS *address_expr,
 
 	/* These relocations can have an addend that won't fit in
 	   4 octets for 64bit assembly.  */
-	if (rv64
+	if (xlen == 64
 	    && ! howto->partial_inplace
 	    && (reloc_type == BFD_RELOC_32
 		|| reloc_type == BFD_RELOC_64
@@ -843,7 +849,7 @@ macro_build (expressionS *ep, const char *name, const char *fmt, ...)
 static void
 normalize_constant_expr (expressionS *ex)
 {
-  if (rv64)
+  if (xlen > 32)
     return;
   if ((ex->X_op == O_constant || ex->X_op == O_symbol)
       && IS_ZEXT_32BIT_NUM (ex->X_add_number))
@@ -924,7 +930,7 @@ load_const (int reg, expressionS *ep)
 
   gas_assert (ep->X_op == O_constant);
 
-  if (rv64 && !IS_SEXT_32BIT_NUM(ep->X_add_number))
+  if (xlen > 32 && !IS_SEXT_32BIT_NUM(ep->X_add_number))
     {
       /* Reduce to a signed 32-bit constant using SLLI and ADDI, which
 	 is not optimal but also not so bad.  */
@@ -1598,7 +1604,7 @@ rvc_lui:
 	    case '>':		/* shift amount, 0 - (XLEN-1) */
 	      my_getExpression (imm_expr, s);
 	      check_absolute_expr (ip, imm_expr);
-	      if ((unsigned long) imm_expr->X_add_number > (rv64 ? 63 : 31))
+	      if ((unsigned long) imm_expr->X_add_number >= xlen)
 		as_warn (_("Improper shift amount (%lu)"),
 			 (unsigned long) imm_expr->X_add_number);
 	      INSERT_OPERAND (SHAMT, *ip, imm_expr->X_add_number);
@@ -1900,11 +1906,11 @@ md_parse_option (int c, char *arg)
       break;
 
     case OPTION_M32:
-      rv64 = FALSE;
+      xlen = 32;
       break;
 
     case OPTION_M64:
-      rv64 = TRUE;
+      xlen = 64;
       break;
 
     case OPTION_MARCH:
@@ -1930,6 +1936,16 @@ riscv_after_parse_args (void)
 {
   if (riscv_subsets == NULL)
     riscv_set_arch ("RVIMAFDXcustom");
+
+  if (xlen == 0)
+    {
+      if (strcmp (default_arch, "riscv32") == 0)
+	xlen = 32;
+      else if (strcmp (default_arch, "riscv64") == 0)
+	xlen = 64;
+      else
+	as_bad ("unknown default architecture `%s'", default_arch);
+    }
 
   if (riscv_opts.rvc)
     elf_flags |= EF_RISCV_RVC;
@@ -2177,11 +2193,23 @@ s_bss (int ignore ATTRIBUTE_UNUSED)
 /* Align to a given power of two.  */
 
 static void
-s_align (int x ATTRIBUTE_UNUSED)
+s_align (int bytes_p)
 {
-  int alignment, fill_value = 0, fill_value_specified = 0;
+  int fill_value = 0, fill_value_specified = 0;
+  int min_text_alignment = riscv_opts.rvc ? 2 : 4;
+  int alignment = get_absolute_expression(), bytes;
 
-  alignment = get_absolute_expression ();
+  if (bytes_p)
+    {
+      bytes = alignment;
+      if (bytes < 1 || (bytes & (bytes-1)) != 0)
+	as_bad (_("alignment not a power of 2: %d"), bytes);
+      for (alignment = 0; bytes > 1; bytes >>= 1)
+	alignment++;
+    }
+
+  bytes = 1 << alignment;
+
   if (alignment < 0 || alignment > 31)
     as_bad (_("unsatisfiable alignment: %d"), alignment);
 
@@ -2193,12 +2221,12 @@ s_align (int x ATTRIBUTE_UNUSED)
     }
 
   if (!fill_value_specified && subseg_text_p (now_seg)
-      && alignment > (riscv_opts.rvc ? 1 : 2))
+      && bytes > min_text_alignment)
     {
       /* Emit the worst-case NOP string.  The linker will delete any
          unnecessary NOPs.  This allows us to support code alignment
          in spite of linker relaxations.  */
-      bfd_vma i, worst_case_bytes = (1L << alignment) - (riscv_opts.rvc ? 2 :4);
+      bfd_vma i, worst_case_bytes = bytes - min_text_alignment;
       char *nops = frag_more (worst_case_bytes);
       for (i = 0; i < worst_case_bytes - 2; i += 4)
 	md_number_to_chars (nops + i, RISCV_NOP, 4);
@@ -2436,6 +2464,8 @@ static const pseudo_typeS riscv_pseudo_table[] =
   {"dtpreldword", s_dtprel, 8},
   {"bss", s_bss, 0},
   {"align", s_align, 0},
+  {"p2align", s_align, 0},
+  {"balign", s_align, 1},
 
   /* leb128 doesn't work with relaxation; disallow it */
   {"uleb128", s_err, 0},
