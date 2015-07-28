@@ -1917,6 +1917,7 @@ md_parse_option (int c, char *arg)
 
     case OPTION_MARCH:
       riscv_set_arch (arg);
+      break;
 
     case OPTION_NO_PIC:
       riscv_opts.pic = FALSE;
