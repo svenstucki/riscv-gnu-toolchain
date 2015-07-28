@@ -592,6 +592,7 @@ validate_riscv_insn (const struct riscv_opcode *opc)
       case ',': break;
       case '(': break;
       case ')': break;
+      case '!': break;
       case '<': USE_BITS (OP_MASK_SHAMTW,	OP_SH_SHAMTW);	break;
       case '>':	USE_BITS (OP_MASK_SHAMT,	OP_SH_SHAMT);	break;
       case 'A': break;
@@ -1586,6 +1587,7 @@ rvc_lui:
 	    case ')':
 	    case '[':
 	    case ']':
+	    case '!':
 	      if (*s++ == *args)
 		continue;
 	      break;

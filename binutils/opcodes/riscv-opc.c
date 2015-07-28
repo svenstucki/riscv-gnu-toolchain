@@ -853,6 +853,30 @@ const struct riscv_opcode riscv_builtin_opcodes[] =
 {"venqimm1",     "Xhwacha", "s,t", MATCH_VENQIMM1, MASK_VENQIMM1, match_opcode, 0},
 {"venqimm2",     "Xhwacha", "s,t", MATCH_VENQIMM2, MASK_VENQIMM2, match_opcode, 0},
 {"venqcnt",      "Xhwacha", "s,t", MATCH_VENQCNT, MASK_VENQCNT, match_opcode, 0},
+
+/* PULP specific opcodes */
+
+/* post-increment loads */
+{"p.lbpost",  "I", "d,o(s!)", MATCH_LBPOST,  MASK_LPOST, match_opcode, WR_xd|RD_xs1},
+{"p.lbupost", "I", "d,o(s!)", MATCH_LBUPOST, MASK_LPOST, match_opcode, WR_xd|RD_xs1},
+{"p.lhpost",  "I", "d,o(s!)", MATCH_LHPOST,  MASK_LPOST, match_opcode, WR_xd|RD_xs1},
+{"p.lhupost", "I", "d,o(s!)", MATCH_LHUPOST, MASK_LPOST, match_opcode, WR_xd|RD_xs1},
+{"p.lwpost",  "I", "d,o(s!)", MATCH_LWPOST,  MASK_LPOST, match_opcode, WR_xd|RD_xs1},
+
+/* register-register loads */
+{"p.lbrr",  "I", "d,t(s)", MATCH_LBRR,  MASK_LRR, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lburr", "I", "d,t(s)", MATCH_LBURR, MASK_LRR, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lhrr",  "I", "d,t(s)", MATCH_LHRR,  MASK_LRR, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lhurr", "I", "d,t(s)", MATCH_LHURR, MASK_LRR, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lwrr",  "I", "d,t(s)", MATCH_LWRR,  MASK_LRR, match_opcode, WR_xd|RD_xs1|RD_xs2},
+
+/* register-register post-increment loads */
+// TODO: tell compiler that rs1 will be updated (INSN_WRITE_GPR_S or WR_xs1 equivalent)
+{"p.lbrrpost",  "I", "d,t(s!)", MATCH_LBRRPOST,  MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lburrpost", "I", "d,t(s!)", MATCH_LBURRPOST, MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lhrrpost",  "I", "d,t(s!)", MATCH_LHRRPOST,  MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lhurrpost", "I", "d,t(s!)", MATCH_LHURRPOST, MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lwrrpost",  "I", "d,t(s!)", MATCH_LWRRPOST,  MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
 };
 
 #define RISCV_NUM_OPCODES \
