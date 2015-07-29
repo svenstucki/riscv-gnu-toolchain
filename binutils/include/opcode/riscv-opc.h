@@ -835,20 +835,20 @@
 /* PULP specific instructions */
 
 /* post-increment loads */
-#define MASK_LPOST    0x707f
-#define MATCH_LBPOST  0x0007
-#define MATCH_LBUPOST 0x4007
-#define MATCH_LHPOST  0x1007
-#define MATCH_LHUPOST 0x5007
-#define MATCH_LWPOST  0x2007
+#define MASK_LPOST      0x707f
+#define MATCH_LBPOST    0x0007
+#define MATCH_LBUPOST   0x4007
+#define MATCH_LHPOST    0x1007
+#define MATCH_LHUPOST   0x5007
+#define MATCH_LWPOST    0x2007
 
 /* register-register loads */
-#define MASK_LRR    0xfe00707f
-#define MATCH_LBRR  0x00007003
-#define MATCH_LBURR 0x40007003
-#define MATCH_LHRR  0x10007003
-#define MATCH_LHURR 0x50007003
-#define MATCH_LWRR  0x20007003
+#define MASK_LRR        0xfe00707f
+#define MATCH_LBRR      0x00007003
+#define MATCH_LBURR     0x40007003
+#define MATCH_LHRR      0x10007003
+#define MATCH_LHURR     0x50007003
+#define MATCH_LWRR      0x20007003
 
 /* register-register post-increment loads */
 #define MASK_LRRPOST    0xfe00707f
@@ -857,6 +857,24 @@
 #define MATCH_LHRRPOST  0x10007007
 #define MATCH_LHURRPOST 0x50007007
 #define MATCH_LWRRPOST  0x20007007
+
+/* post-increment stores */
+#define MASK_SPOST     0x707f
+#define MATCH_SBPOST   0x0027
+#define MATCH_SHPOST   0x1027
+#define MATCH_SWPOST   0x2027
+
+/* register-register stores */
+#define MASK_SRR       0xfe00707f
+#define MATCH_SBRR     0x00004023
+#define MATCH_SHRR     0x00005023
+#define MATCH_SWRR     0x00006023
+
+/* register-register post-increment stores */
+#define MASK_SRRPOST   0xfe00707f
+#define MATCH_SBRRPOST 0x00004027
+#define MATCH_SHRRPOST 0x00005027
+#define MATCH_SWRRPOST 0x00006027
 #endif
 #ifdef DECLARE_INSN
 DECLARE_INSN(add, MATCH_ADD, MASK_ADD)
