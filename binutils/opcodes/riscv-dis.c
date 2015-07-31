@@ -32,6 +32,8 @@
 #include <stdint.h>
 #include <ctype.h>
 
+#include <stdio.h>
+
 struct riscv_private_data
 {
   bfd_vma gp;
@@ -296,6 +298,7 @@ print_insn_args (const char *d, insn_t l, bfd_vma pc, disassemble_info *info)
 	  break;
 
 	case ',':
+    case '!':
 	case '(':
 	case ')':
 	case '[':
@@ -454,8 +457,8 @@ riscv_disassemble_insn (bfd_vma memaddr, insn_t word, disassemble_info *info)
     {
       for (op = riscv_opcodes; op < &riscv_opcodes[NUMOPCODES]; op++)
         {
-	  if (!riscv_hash[OP_HASH_IDX (op->match)])
-	    riscv_hash[OP_HASH_IDX (op->match)] = op;
+          if (!riscv_hash[OP_HASH_IDX (op->match)])
+            riscv_hash[OP_HASH_IDX (op->match)] = op;
         }
 
       init = 1;
