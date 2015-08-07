@@ -1774,77 +1774,77 @@ riscv_output_move (rtx dest, rtx src)
       || (src == CONST0_RTX (mode)))
     {
       if (dest_code == REG)
-	{
-	  if (GP_REG_P (REGNO (dest)))
-	    return "mv\t%0,%z1";
+        {
+          if (GP_REG_P (REGNO (dest)))
+            return "mv\t%0,%z1";
 
-	  if (FP_REG_P (REGNO (dest)))
-	    {
-	      if (!dbl_p)
-		return "fmv.s.x\t%0,%z1";
-	      if (TARGET_64BIT)
-		return "fmv.d.x\t%0,%z1";
-	      /* in RV32, we can emulate fmv.d.x %0, x0 using fcvt.d.w */
-	      gcc_assert (src == CONST0_RTX (mode));
-	      return "fcvt.d.w\t%0,x0";
-	    }
-	}
+          if (FP_REG_P (REGNO (dest)))
+            {
+              if (!dbl_p)
+                return "fmv.s.x\t%0,%z1";
+              if (TARGET_64BIT)
+                return "fmv.d.x\t%0,%z1";
+              /* in RV32, we can emulate fmv.d.x %0, x0 using fcvt.d.w */
+              gcc_assert (src == CONST0_RTX (mode));
+              return "fcvt.d.w\t%0,x0";
+            }
+        }
       if (dest_code == MEM)
-	switch (GET_MODE_SIZE (mode))
-	  {
-	  case 1: return "sb\t%z1,%0";
-	  case 2: return "sh\t%z1,%0";
-	  case 4: return "sw\t%z1,%0";
-	  case 8: return "sd\t%z1,%0";
-	  }
+        switch (GET_MODE_SIZE (mode))
+          {
+          case 1: return "sb\t%z1,%0";
+          case 2: return "sh\t%z1,%0";
+          case 4: return "sw\t%z1,%0";
+          case 8: return "sd\t%z1,%0";
+          }
     }
   if (dest_code == REG && GP_REG_P (REGNO (dest)))
     {
       if (src_code == REG)
-	{
-	  if (FP_REG_P (REGNO (src)))
-	    return dbl_p ? "fmv.x.d\t%0,%1" : "fmv.x.s\t%0,%1";
-	}
+        {
+          if (FP_REG_P (REGNO (src)))
+            return dbl_p ? "fmv.x.d\t%0,%1" : "fmv.x.s\t%0,%1";
+        }
 
       if (src_code == MEM)
-	switch (GET_MODE_SIZE (mode))
-	  {
-	  case 1: return "lbu\t%0,%1";
-	  case 2: return "lhu\t%0,%1";
-	  case 4: return "lw\t%0,%1";
-	  case 8: return "ld\t%0,%1";
-	  }
+        switch (GET_MODE_SIZE (mode))
+          {
+          case 1: return "lbu\t%0,%1";
+          case 2: return "lhu\t%0,%1";
+          case 4: return "lw\t%0,%1";
+          case 8: return "ld\t%0,%1";
+          }
 
       if (src_code == CONST_INT)
-	return "li\t%0,%1";
+        return "li\t%0,%1";
 
       if (src_code == HIGH)
-	return "lui\t%0,%h1";
+        return "lui\t%0,%h1";
 
       if (symbolic_operand (src, VOIDmode))
-	switch (riscv_classify_symbolic_expression (src))
-	  {
-	  case SYMBOL_GOT_DISP: return "la\t%0,%1";
-	  case SYMBOL_ABSOLUTE: return "lla\t%0,%1";
-	  default: gcc_unreachable();
-	  }
+        switch (riscv_classify_symbolic_expression (src))
+          {
+          case SYMBOL_GOT_DISP: return "la\t%0,%1";
+          case SYMBOL_ABSOLUTE: return "lla\t%0,%1";
+          default: gcc_unreachable();
+          }
     }
   if (src_code == REG && FP_REG_P (REGNO (src)))
     {
       if (dest_code == REG && FP_REG_P (REGNO (dest)))
-	return dbl_p ? "fmv.d\t%0,%1" : "fmv.s\t%0,%1";
+        return dbl_p ? "fmv.d\t%0,%1" : "fmv.s\t%0,%1";
 
       if (dest_code == MEM)
-	return dbl_p ? "fsd\t%1,%0" : "fsw\t%1,%0";
+        return dbl_p ? "fsd\t%1,%0" : "fsw\t%1,%0";
     }
   if (dest_code == REG && FP_REG_P (REGNO (dest)))
     {
       if (src_code == MEM)
-	return dbl_p ? "fld\t%0,%1" : "flw\t%0,%1";
+        return dbl_p ? "fld\t%0,%1" : "flw\t%0,%1";
     }
   gcc_unreachable ();
 }
-
+
 /* Return true if CMP1 is a suitable second operand for integer ordering
    test CODE.  See also the *sCC patterns in riscv.md.  */
 
