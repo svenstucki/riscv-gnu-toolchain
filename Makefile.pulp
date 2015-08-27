@@ -5,3 +5,4 @@ build:
 	-cd $(BUILD_DIR)/gcc && rm -r src/gcc/isl*
 	cd $(BUILD_DIR)/gcc && make -j10
 	cd $(BUILD_DIR)/gcc/build-gcc-newlib/ && make -j10 && make install
+  cp setup.sh $(PKG_DIR)
