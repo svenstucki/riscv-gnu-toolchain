@@ -1,0 +1,11 @@
+--- gcc/gcc/gcc.c
++++ gcc.patched/gcc/gcc.c
+@@ -998,7 +998,7 @@ static const char *const multilib_defaul
+ /* Linking to libgomp implies pthreads.  This is particularly important
+    for targets that use different start files and suchlike.  */
+ #ifndef GOMP_SELF_SPECS
+-#define GOMP_SELF_SPECS "%{fopenacc|fopenmp|ftree-parallelize-loops=*: " \
++#define GOMP_SELF_SPECS "%{fopenacc|ftree-parallelize-loops=*: " \
+   "-pthread}"
+ #endif
+ 
