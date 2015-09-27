@@ -585,6 +585,7 @@ validate_riscv_insn (const struct riscv_opcode *opc)
       case 'm':	USE_BITS (OP_MASK_RM,		OP_SH_RM);	break;
       case 's':	USE_BITS (OP_MASK_RS1,		OP_SH_RS1);	break;
       case 't':	USE_BITS (OP_MASK_RS2,		OP_SH_RS2);	break;
+      case 'r':	USE_BITS (OP_MASK_RS3I,		OP_SH_RS3I);	break;
       case 'P':	USE_BITS (OP_MASK_PRED,		OP_SH_PRED); break;
       case 'Q':	USE_BITS (OP_MASK_SUCC,		OP_SH_SUCC); break;
       case 'o':
@@ -1570,6 +1571,7 @@ rvc_lui:
 	    case 'd':		/* destination register */
 	    case 's':		/* source register */
 	    case 't':		/* target register */
+	    case 'r':
 	      if (reg_lookup (&s, RCLASS_GPR, &regno))
 		{
 		  c = *args;
@@ -1588,6 +1590,9 @@ rvc_lui:
 		      break;
 		    case 't':
 		      INSERT_OPERAND (RS2, *ip, regno);
+		      break;
+		    case 'r':
+		      INSERT_OPERAND (RS3, *ip, regno);
 		      break;
 		    }
 		  continue;
