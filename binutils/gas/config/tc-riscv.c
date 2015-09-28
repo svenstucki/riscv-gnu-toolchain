@@ -1592,7 +1592,7 @@ rvc_lui:
 		      INSERT_OPERAND (RS2, *ip, regno);
 		      break;
 		    case 'r':
-		      INSERT_OPERAND (RS3, *ip, regno);
+		      INSERT_OPERAND (RS3I, *ip, regno);
 		      break;
 		    }
 		  continue;
