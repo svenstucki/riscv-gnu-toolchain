@@ -833,16 +833,20 @@
 #define MATCH_SWPOST   0x2027
 
 /* register-register stores */
-#define MASK_SRR       0xfe00707f
+#define MASK_SRR       0xc0007fff
 #define MATCH_SBRR     0x00004023
 #define MATCH_SHRR     0x00005023
 #define MATCH_SWRR     0x00006023
 
 /* register-register post-increment stores */
-#define MASK_SRRPOST   0xfe00707f
+#define MASK_SRRPOST   0xc0007fff
 #define MATCH_SBRRPOST 0x00004027
 #define MATCH_SHRRPOST 0x00005027
 #define MATCH_SWRRPOST 0x00006027
+
+/* MAC */
+#define MASK_MAC  0xc000707f
+#define MATCH_MAC 0x00000057
 #endif
 #ifdef DECLARE_INSN
 DECLARE_INSN(add, MATCH_ADD, MASK_ADD)
@@ -1228,6 +1232,9 @@ DECLARE_INSN(p.lburrpost, MATCH_LBURRPOST, MASK_LRRPOST)
 DECLARE_INSN(p.lhrrpost,  MATCH_LHRRPOST,  MASK_LRRPOST)
 DECLARE_INSN(p.lhurrpost, MATCH_LHURRPOST, MASK_LRRPOST)
 DECLARE_INSN(p.lwrrpost,  MATCH_LWRRPOST,  MASK_LRRPOST)
+
+/* MAC */
+DECLARE_INSN(p.lmac, MATCH_MAC, MASK_MAC)
 #endif
 #ifdef DECLARE_CSR
 DECLARE_CSR(fflags, CSR_FFLAGS)

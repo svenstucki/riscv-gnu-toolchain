@@ -613,48 +613,51 @@ const struct riscv_opcode riscv_builtin_opcodes[] =
 /* PULP specific opcodes */
 
 /* post-increment and register-register loads */
-/* TODO: fix last field: reg-reg updates rs1 (INSN_WRITE_GPR_S or WR_xs1 equivalent) */
-{"p.lb",  "I", "d,o(s)",  MATCH_LB,        MASK_LB,      match_opcode, WR_xd|RD_xs1},
-{"p.lb",  "I", "d,o(s!)", MATCH_LBPOST,    MASK_LPOST,   match_opcode, WR_xd|RD_xs1},
-{"p.lb",  "I", "d,t(s)",  MATCH_LBRR,      MASK_LRR,     match_opcode, WR_xd|RD_xs1|RD_xs2},
-{"p.lb",  "I", "d,t(s!)", MATCH_LBRRPOST,  MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+/* TODO: fix last field */
+{"p.lb",  "I", "d,o(s)",  MATCH_LB,        MASK_LB,      match_opcode, RD_xs1},
+{"p.lb",  "I", "d,o(s!)", MATCH_LBPOST,    MASK_LPOST,   match_opcode, RD_xs1},
+{"p.lb",  "I", "d,t(s)",  MATCH_LBRR,      MASK_LRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.lb",  "I", "d,t(s!)", MATCH_LBRRPOST,  MASK_LRRPOST, match_opcode, RD_xs1|RD_xs2},
 
-{"p.lbu", "I", "d,o(s)",  MATCH_LBU,       MASK_LBU,     match_opcode, WR_xd|RD_xs1},
-{"p.lbu", "I", "d,o(s!)", MATCH_LBUPOST,   MASK_LPOST,   match_opcode, WR_xd|RD_xs1},
-{"p.lbu", "I", "d,t(s)",  MATCH_LBURR,     MASK_LRR,     match_opcode, WR_xd|RD_xs1|RD_xs2},
-{"p.lbu", "I", "d,t(s!)", MATCH_LBURRPOST, MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lbu", "I", "d,o(s)",  MATCH_LBU,       MASK_LBU,     match_opcode, RD_xs1},
+{"p.lbu", "I", "d,o(s!)", MATCH_LBUPOST,   MASK_LPOST,   match_opcode, RD_xs1},
+{"p.lbu", "I", "d,t(s)",  MATCH_LBURR,     MASK_LRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.lbu", "I", "d,t(s!)", MATCH_LBURRPOST, MASK_LRRPOST, match_opcode, RD_xs1|RD_xs2},
 
-{"p.lh",  "I", "d,o(s)",  MATCH_LH,        MASK_LH,      match_opcode, WR_xd|RD_xs1},
-{"p.lh",  "I", "d,o(s!)", MATCH_LHPOST,    MASK_LPOST,   match_opcode, WR_xd|RD_xs1},
-{"p.lh",  "I", "d,t(s)",  MATCH_LHRR,      MASK_LRR,     match_opcode, WR_xd|RD_xs1|RD_xs2},
-{"p.lh",  "I", "d,t(s!)", MATCH_LHRRPOST,  MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lh",  "I", "d,o(s)",  MATCH_LH,        MASK_LH,      match_opcode, RD_xs1},
+{"p.lh",  "I", "d,o(s!)", MATCH_LHPOST,    MASK_LPOST,   match_opcode, RD_xs1},
+{"p.lh",  "I", "d,t(s)",  MATCH_LHRR,      MASK_LRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.lh",  "I", "d,t(s!)", MATCH_LHRRPOST,  MASK_LRRPOST, match_opcode, RD_xs1|RD_xs2},
 
-{"p.lhu", "I", "d,o(s)",  MATCH_LHU,       MASK_LHU,     match_opcode, WR_xd|RD_xs1},
-{"p.lhu", "I", "d,o(s!)", MATCH_LHUPOST,   MASK_LPOST,   match_opcode, WR_xd|RD_xs1},
-{"p.lhu", "I", "d,t(s)",  MATCH_LHURR,     MASK_LRR,     match_opcode, WR_xd|RD_xs1|RD_xs2},
-{"p.lhu", "I", "d,t(s!)", MATCH_LHURRPOST, MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lhu", "I", "d,o(s)",  MATCH_LHU,       MASK_LHU,     match_opcode, RD_xs1},
+{"p.lhu", "I", "d,o(s!)", MATCH_LHUPOST,   MASK_LPOST,   match_opcode, RD_xs1},
+{"p.lhu", "I", "d,t(s)",  MATCH_LHURR,     MASK_LRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.lhu", "I", "d,t(s!)", MATCH_LHURRPOST, MASK_LRRPOST, match_opcode, RD_xs1|RD_xs2},
 
-{"p.lw",  "I", "d,o(s)",  MATCH_LW,        MASK_LW,      match_opcode, WR_xd|RD_xs1},
-{"p.lw",  "I", "d,o(s!)", MATCH_LWPOST,    MASK_LPOST,   match_opcode, WR_xd|RD_xs1},
-{"p.lw",  "I", "d,t(s)",  MATCH_LWRR,      MASK_LRR,     match_opcode, WR_xd|RD_xs1|RD_xs2},
-{"p.lw",  "I", "d,t(s!)", MATCH_LWRRPOST,  MASK_LRRPOST, match_opcode, WR_xd|RD_xs1|RD_xs2},
+{"p.lw",  "I", "d,o(s)",  MATCH_LW,        MASK_LW,      match_opcode, RD_xs1},
+{"p.lw",  "I", "d,o(s!)", MATCH_LWPOST,    MASK_LPOST,   match_opcode, RD_xs1},
+{"p.lw",  "I", "d,t(s)",  MATCH_LWRR,      MASK_LRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.lw",  "I", "d,t(s!)", MATCH_LWRRPOST,  MASK_LRRPOST, match_opcode, RD_xs1|RD_xs2},
 
 /* post-increment and reg-reg stores */
-/* TODO: fix last field: reg-reg updates rs1 and reads rd */
+/* TODO: fix last field */
 {"p.sb",  "I", "t,q(s)",  MATCH_SB,        MASK_SB,      match_opcode, RD_xs1|RD_xs2},
 {"p.sb",  "I", "t,q(s!)", MATCH_SBPOST,    MASK_SPOST,   match_opcode, RD_xs1|RD_xs2},
-{"p.sb",  "I", "t,d(s)",  MATCH_SBRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
-{"p.sb",  "I", "t,d(s!)", MATCH_SBRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
+{"p.sb",  "I", "t,r(s)",  MATCH_SBRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.sb",  "I", "t,r(s!)", MATCH_SBRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
 
 {"p.sh",  "I", "t,q(s)",  MATCH_SH,        MASK_SH,      match_opcode, RD_xs1|RD_xs2},
 {"p.sh",  "I", "t,q(s!)", MATCH_SHPOST,    MASK_SPOST,   match_opcode, RD_xs1|RD_xs2},
-{"p.sh",  "I", "t,d(s)",  MATCH_SHRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
-{"p.sh",  "I", "t,d(s!)", MATCH_SHRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
+{"p.sh",  "I", "t,r(s)",  MATCH_SHRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.sh",  "I", "t,r(s!)", MATCH_SHRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
 
 {"p.sw",  "I", "t,q(s)",  MATCH_SW,        MASK_SW,      match_opcode, RD_xs1|RD_xs2},
 {"p.sw",  "I", "t,q(s!)", MATCH_SWPOST,    MASK_SPOST,   match_opcode, RD_xs1|RD_xs2},
-{"p.sw",  "I", "t,d(s)",  MATCH_SWRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
-{"p.sw",  "I", "t,d(s!)", MATCH_SWRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
+{"p.sw",  "I", "t,r(s)",  MATCH_SWRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
+{"p.sw",  "I", "t,r(s!)", MATCH_SWRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
+
+/* MAC instruction */
+{"p.mac", "I", "d,s,t,r", MATCH_MAC,       MASK_MAC,     match_opcode, RD_xs1|RD_xs2},
 };
 
 #define RISCV_NUM_OPCODES \
