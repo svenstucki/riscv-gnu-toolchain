@@ -1,0 +1,10 @@
+build:
+	mkdir -p $(BUILD_DIR)/gcc
+	cd $(BUILD_DIR)/gcc && $(CURDIR)/configure --with-xlen=32 --with-arch=IM --disable-atomic --disable-float --enable-multilib --prefix=$(PKG_DIR)
+	-cd $(BUILD_DIR)/gcc && make -j10
+	-cd $(BUILD_DIR)/gcc && rm -r src/gcc/isl*
+	cd $(BUILD_DIR)/gcc/src/gcc && patch -p1 < $(CURDIR)/pulp.patch
+	cd $(BUILD_DIR)/gcc/src/newlib-gcc && patch -p1 < $(CURDIR)/pulp.patch
+	cd $(BUILD_DIR)/gcc && make -j10
+	cd $(BUILD_DIR)/gcc/build-gcc-newlib/ && make -j10 && make install
+	cp setup.sh $(PKG_DIR)
