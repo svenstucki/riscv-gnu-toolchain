@@ -656,6 +656,13 @@ const struct riscv_opcode riscv_builtin_opcodes[] =
 {"p.sw",  "I", "t,r(s)",  MATCH_SWRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
 {"p.sw",  "I", "t,r(s!)", MATCH_SWRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
 
+/* hardware loops */
+{"lp.starti", "I", "d,j",   MATCH_HWLP_STARTI, MASK_HWLP_STARTI, match_opcode, 0},
+{"lp.endi",   "I", "d,j",   MATCH_HWLP_ENDI,   MASK_HWLP_ENDI,   match_opcode, 0},
+{"lp.count",  "I", "d,s",   MATCH_HWLP_COUNT,  MASK_HWLP_COUNT,  match_opcode, RD_xs1},
+{"lp.counti", "I", "d,j",   MATCH_HWLP_COUNTI, MASK_HWLP_COUNTI, match_opcode, 0},
+{"lp.setup",  "I", "d,s,j", MATCH_HWLP_SETUP,  MASK_HWLP_SETUP,  match_opcode, RD_xs1},
+
 /* MAC instruction */
 {"p.mac", "I", "d,s,t,r", MATCH_MAC,       MASK_MAC,     match_opcode, RD_xs1|RD_xs2},
 };
