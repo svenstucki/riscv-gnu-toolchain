@@ -77,6 +77,7 @@ const char * const riscv_fpr_names_abi[32] = {
 #define MASK_RS1 (OP_MASK_RS1 << OP_SH_RS1)
 #define MASK_RS2 (OP_MASK_RS2 << OP_SH_RS2)
 #define MASK_RD (OP_MASK_RD << OP_SH_RD)
+#define MASK_CRS2 (OP_MASK_CRS2 << OP_SH_CRS2)
 #define MASK_IMM ENCODE_ITYPE_IMM(-1U)
 #define MASK_RVC_IMM ENCODE_RVC_IMM(-1U)
 #define MASK_UIMM ENCODE_UTYPE_IMM(-1U)
@@ -112,7 +113,7 @@ static int match_rd_nonzero(const struct riscv_opcode *op, insn_t insn)
 
 static int match_c_add(const struct riscv_opcode *op, insn_t insn)
 {
-  return match_rd_nonzero (op, insn) && ((insn & OP_MASK_CRS2) != 0);
+  return match_rd_nonzero (op, insn) && ((insn & MASK_CRS2) != 0);
 }
 
 static int match_c_lui(const struct riscv_opcode *op, insn_t insn)
@@ -152,7 +153,7 @@ const struct riscv_opcode riscv_builtin_opcodes[] =
 {"nop",       "I",   "",         MATCH_ADDI, MASK_ADDI | MASK_RD | MASK_RS1 | MASK_IMM, match_opcode,  INSN_ALIAS },
 {"lui",       "C",   "d,Cu",  MATCH_C_LUI, MASK_C_LUI, match_c_lui, INSN_ALIAS },
 {"lui",       "I",   "d,u",  MATCH_LUI, MASK_LUI, match_opcode,   WR_xd },
-{"li",        "C",   "d,Cv",  MATCH_C_LUI, MASK_C_LUI, match_rd_nonzero, INSN_ALIAS },
+{"li",        "C",   "d,Cv",  MATCH_C_LUI, MASK_C_LUI, match_c_lui, INSN_ALIAS },
 {"li",        "C",   "d,Cj",  MATCH_C_LI, MASK_C_LI, match_rd_nonzero, INSN_ALIAS },
 {"li",        "C",   "d,0",  MATCH_C_LI, MASK_C_LI | MASK_RVC_IMM, match_rd_nonzero, INSN_ALIAS },
 {"li",        "I",   "d,j",      MATCH_ADDI, MASK_ADDI | MASK_RS1, match_opcode,  INSN_ALIAS|WR_xd }, /* addi */
