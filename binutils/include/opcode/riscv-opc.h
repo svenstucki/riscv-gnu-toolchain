@@ -866,6 +866,32 @@
 #define MATCH_SHRRPOST 0x00005027
 #define MATCH_SWRRPOST 0x00006027
 
+/* additional ALU operations */
+#define MASK_PALU   0xfe00707f
+#define MATCH_AVG   0x04000033
+#define MATCH_AVGU  0x04001033
+#define MATCH_SLET  0x04002033
+#define MATCH_SLETU 0x04003033
+#define MATCH_MIN   0x04004033
+#define MATCH_MINU  0x04005033
+#define MATCH_MAX   0x04006033
+#define MATCH_MAXU  0x04007033
+
+#define MATCH_ROR   0x08005033
+
+/* additional ALU operations with only a single operand */
+#define MASK_PALUS  0xfff0707f
+#define MATCH_FF1   0x10000033
+#define MATCH_FL1   0x10001033
+#define MATCH_CLB   0x10002033
+#define MATCH_CNT   0x10003033
+#define MATCH_EXTHS 0x10004033
+#define MATCH_EXTHZ 0x10005033
+#define MATCH_EXTBS 0x10006033
+#define MATCH_EXTBZ 0x10007033
+
+#define MATCH_ABS   0x14000033
+
 /* harware loops */
 #define MASK_HWLP_STARTI 0x000ff07f
 #define MASK_HWLP_ENDI   0x000ff07f

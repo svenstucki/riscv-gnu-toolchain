@@ -694,6 +694,30 @@ const struct riscv_opcode riscv_builtin_opcodes[] =
 {"p.sw",  "I", "t,r(s)",  MATCH_SWRR,      MASK_SRR,     match_opcode, RD_xs1|RD_xs2},
 {"p.sw",  "I", "t,r(s!)", MATCH_SWRRPOST,  MASK_SRRPOST, match_opcode, RD_xs1|RD_xs2},
 
+/* additional ALU operations */
+{"p.avg",   "I", "d,s,t", MATCH_AVG,   MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+{"p.avgu",  "I", "d,s,t", MATCH_AVGU,  MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+{"p.slet",  "I", "d,s,t", MATCH_SLET,  MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+{"p.sletu", "I", "d,s,t", MATCH_SLETU, MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+{"p.min",   "I", "d,s,t", MATCH_MIN,   MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+{"p.minu",  "I", "d,s,t", MATCH_MINU,  MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+{"p.max",   "I", "d,s,t", MATCH_MAX,   MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+{"p.maxu",  "I", "d,s,t", MATCH_MAXU,  MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+
+{"p.ror",   "I", "d,s,t", MATCH_ROR,   MASK_PALU,  match_opcode, WR_xd|RD_xs1|RD_xs2 },
+
+/* additional ALU operations with only a single source operand */
+{"p.ff1",   "I", "d,s",   MATCH_FF1,   MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+{"p.fl1",   "I", "d,s",   MATCH_FL1,   MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+{"p.clb",   "I", "d,s",   MATCH_CLB,   MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+{"p.cnt",   "I", "d,s",   MATCH_CNT,   MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+{"p.exths", "I", "d,s",   MATCH_EXTHS, MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+{"p.exthz", "I", "d,s",   MATCH_EXTHZ, MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+{"p.extbs", "I", "d,s",   MATCH_EXTBS, MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+{"p.extbz", "I", "d,s",   MATCH_EXTBZ, MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+
+{"p.abs",   "I", "d,s",   MATCH_ABS,   MASK_PALUS, match_opcode, WR_xd|RD_xs1 },
+
 /* hardware loops */
 {"lp.starti", "I", "d,j",   MATCH_HWLP_STARTI, MASK_HWLP_STARTI, match_opcode, 0},
 {"lp.endi",   "I", "d,j",   MATCH_HWLP_ENDI,   MASK_HWLP_ENDI,   match_opcode, 0},
